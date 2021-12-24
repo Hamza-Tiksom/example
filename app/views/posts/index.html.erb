@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Posts</h1>
+<% if user_signed_in? %>
+  <h2><%= current_user.email %></h2>
+  <h2>Current User Are Admin or moderator or user </h2>
+  <% if current_user.has_role? :admin %>
+  <h1>Current User is Admin</h1>
+<% elsif current_user.has_role? :moderator %>
+  <h1>Current User is Moderator</h1>
+<% else %>
+  <li>Current User is User</li>
+<% end %>
+<% end %>
+
+<!--  <h2><%#= current_user.has_role? :moderator %></h2>-->
+
+<td><%= link_to "Login",new_user_session_path %></td>
+<td><%= link_to "SignUp",new_user_registration_path %></td>
+<td><%= link_to "logout", destroy_user_session_path, method: :delete  %></td>
+<td><%= link_to "AccessToModirator"%></td>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Body</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.title %></td>
+        <td><%= post.body %></td>
+        <td><%= post.user_id %></td>
+        <td><%= link_to 'Show', post %></td>
+        <td><% if can? :update,post %><%= link_to 'Edit', edit_post_path(post) %><% end %></td>
+        <td><% if can? :destroy,post %><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Post', new_post_path %>
